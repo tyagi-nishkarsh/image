@@ -6,9 +6,9 @@ from transformers import pipeline
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Initialize the pipelines
+# Initialize the pipelines with a TTS model that does not require espeak
 caption_image = pipeline("image-to-text", model="Salesforce/blip-image-captioning-large", device=device)
-narrator = pipeline("text-to-speech", model="kakao-enterprise/vits-ljs")
+narrator = pipeline("text-to-speech", model="google/tts")  # Alternative to espeak-based models
 
 def generate_audio(text):
     """Generate audio from text."""
@@ -43,4 +43,3 @@ if uploaded_image:
             st.subheader("Generated Caption:")
             st.write(caption)
             st.audio(audio_path)
-
