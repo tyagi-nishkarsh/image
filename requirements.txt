@@ -4,4 +4,3 @@ transformers
 Pillow
 scipy
 phonemizer
-espeak
