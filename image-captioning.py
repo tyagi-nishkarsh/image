@@ -6,9 +6,11 @@ from transformers import pipeline
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Initialize the pipelines with a TTS model that does not require espeak
+# Initialize the pipelines with a Coqui TTS model (alternative to espeak-based models)
 caption_image = pipeline("image-to-text", model="Salesforce/blip-image-captioning-large", device=device)
-narrator = pipeline("text-to-speech", model="google/tts")  # Alternative to espeak-based models
+
+# Coqui TTS model (no espeak dependency)
+narrator = pipeline("text-to-speech", model="coqui-ai/tts")  # Use Coqui TTS for audio generation
 
 def generate_audio(text):
     """Generate audio from text."""
