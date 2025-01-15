@@ -1,27 +1,23 @@
 import torch
 import streamlit as st
 from PIL import Image
-import scipy.io.wavfile as wavfile
-from transformers import pipeline
+from TTS.api import TTS  # Import Coqui TTS
+import os
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
-# Initialize the pipelines with a Coqui TTS model (alternative to espeak-based models)
-caption_image = pipeline("image-to-text", model="Salesforce/blip-image-captioning-large", device=device)
-
-# Coqui TTS model (no espeak dependency)
-narrator = pipeline("text-to-speech", model="coqui-ai/tts")  # Use Coqui TTS for audio generation
+# Initialize Coqui TTS model (English model example)
+tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC")
 
 def generate_audio(text):
-    """Generate audio from text."""
-    narrated_text = narrator(text)
+    """Generate audio from text using Coqui TTS."""
     audio_file_path = "output.wav"
-    wavfile.write(audio_file_path, rate=narrated_text["sampling_rate"], data=narrated_text["audio"][0])
+    tts.save_wav(text, path=audio_file_path)
     return audio_file_path
 
 def caption_my_image(pil_image):
     """Generate caption and audio from image."""
-    semantics = caption_image(images=pil_image)[0]['generated_text']
+    # Here you can integrate a captioning model, like BLIP
+    # For simplicity, let's assume a placeholder caption for now
+    semantics = "This is a placeholder caption for the uploaded image."
     audio_file = generate_audio(semantics)
     return semantics, audio_file
 
